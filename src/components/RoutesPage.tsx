@@ -14,6 +14,11 @@ interface Route {
   description: string;
   highlights: string[];
   image: string;
+  monumentIds: number[];
+}
+
+interface RoutesPageProps {
+  onStartRoute: (routeIds: number[], routeTitle: string) => void;
 }
 
 const routes: Route[] = [
@@ -28,6 +33,7 @@ const routes: Route[] = [
     description: "Маршрут проходит через ключевые архитектурные памятники исторического центра. Вы увидите соборы, монастыри и усадьбы разных эпох.",
     highlights: ["Успенский собор", "Монастырь Троицкий", "Дворянская усадьба"],
     image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/641250ac-a0d6-4367-9fe3-0cf0e48e7445.jpg",
+    monumentIds: [1, 6, 3, 9, 11, 8],
   },
   {
     id: 2,
@@ -40,6 +46,7 @@ const routes: Route[] = [
     description: "Экспедиционный маршрут к городищам и курганам раннеславянского периода. Включает посещение музея под открытым небом.",
     highlights: ["Городище Старое", "Курганный могильник", "Петроглифы"],
     image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/7a1577ca-82a1-40df-995b-b6896c1939f8.jpg",
+    monumentIds: [2, 4, 7, 10],
   },
   {
     id: 3,
@@ -50,8 +57,9 @@ const routes: Route[] = [
     difficulty: "Лёгкий",
     stops: 3,
     description: "Прогулочный маршрут по охраняемым природным территориям: реликтовый бор, исторический парк, вековые деревья.",
-    highlights: ["Заповедный бор", "Парк культуры", "Родниковая роща"],
+    highlights: ["Заповедный бор", "Парк культуры", "Аргамач"],
     image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/b49a6cc5-42fe-4cfb-a828-5f884d37fda9.jpg",
+    monumentIds: [5, 8, 13],
   },
   {
     id: 4,
@@ -60,10 +68,11 @@ const routes: Route[] = [
     duration: "Весь день",
     distance: "15 км",
     difficulty: "Сложный",
-    stops: 12,
+    stops: 10,
     description: "Полный тур по всем значимым объектам региона. Охватывает памятники от бронзового века до XIX столетия. Рекомендован транспорт.",
-    highlights: ["12 ключевых объектов", "Все типы памятников", "Экскурсовод"],
+    highlights: ["10 ключевых объектов", "Все типы памятников", "Экскурсовод"],
     image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/641250ac-a0d6-4367-9fe3-0cf0e48e7445.jpg",
+    monumentIds: [1, 6, 3, 2, 4, 7, 5, 8, 13, 14],
   },
 ];
 
@@ -95,7 +104,7 @@ const difficultyColor: Record<string, string> = {
   "Сложный": "hsl(0 50% 40%)",
 };
 
-export default function RoutesPage() {
+export default function RoutesPage({ onStartRoute }: RoutesPageProps) {
   const [tab, setTab] = useState<TabType>("ready");
   const [selected, setSelected] = useState<Route>(routes[0]);
 
@@ -251,6 +260,7 @@ export default function RoutesPage() {
               </div>
 
               <button
+                onClick={() => onStartRoute(selected.monumentIds, selected.title)}
                 className="w-full py-3 text-xs tracking-[0.15em] uppercase font-ibm transition-all hover:opacity-80 flex items-center justify-center gap-2"
                 style={{ background: 'hsl(var(--gold))', color: 'hsl(var(--ink))' }}
               >
@@ -392,7 +402,12 @@ export default function RoutesPage() {
 
               <div className="flex flex-col gap-2">
                 <button
-                  onClick={saveRoute}
+                  onClick={() => {
+                    saveRoute();
+                    if (routeName.trim() && selectedMonuments.length > 0) {
+                      onStartRoute(selectedMonuments, routeName.trim());
+                    }
+                  }}
                   disabled={!routeName.trim() || selectedMonuments.length === 0}
                   className="w-full py-3 text-xs tracking-[0.15em] uppercase font-ibm transition-all hover:opacity-80 flex items-center justify-center gap-2"
                   style={{
@@ -405,8 +420,8 @@ export default function RoutesPage() {
                     cursor: (!routeName.trim() || selectedMonuments.length === 0) ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  <Icon name="Save" size={12} />
-                  Сохранить маршрут
+                  <Icon name="Navigation" size={12} />
+                  Начать маршрут
                 </button>
                 {(selectedMonuments.length > 0 || routeName) && (
                   <button

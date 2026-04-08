@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Icon from "@/components/ui/icon";
 import ArticlePage from "@/components/ArticlePage";
+import type { ActiveRouteState } from "@/pages/Index";
+
+interface MapPageProps {
+  initialRoute?: ActiveRouteState | null;
+  onRouteClear?: () => void;
+}
 
 interface Monument {
   id: number;
@@ -38,10 +44,7 @@ const typeColors: Record<string, string> = {
   "Культура": "hsl(280 35% 40%)",
 };
 
-// Default route for tracking demo (ordered monument ids)
-const defaultRouteIds = [1, 6, 3, 5, 8, 2];
-
-export default function MapPage() {
+export default function MapPage({ initialRoute, onRouteClear }: MapPageProps) {
   const [selected, setSelected] = useState<Monument | null>(null);
   const [filterType, setFilterType] = useState<string>("Все");
   const [articleId, setArticleId] = useState<number | null>(null);
@@ -53,9 +56,24 @@ export default function MapPage() {
   const watchIdRef = useRef<number | null>(null);
 
   // Route progress tracking
-  const [trackingRoute, setTrackingRoute] = useState(false);
+  const [trackingRoute, setTrackingRoute] = useState(() => !!initialRoute);
   const [visitedIds, setVisitedIds] = useState<number[]>([]);
-  const [activeRouteIds] = useState<number[]>(defaultRouteIds);
+  const [activeRouteIds, setActiveRouteIds] = useState<number[]>(
+    initialRoute?.routeIds ?? [1, 6, 3, 5, 8, 2]
+  );
+  const [activeRouteTitle, setActiveRouteTitle] = useState<string>(
+    initialRoute?.routeTitle ?? ""
+  );
+
+  // Sync when initialRoute changes (navigated from RoutesPage)
+  useEffect(() => {
+    if (initialRoute) {
+      setActiveRouteIds(initialRoute.routeIds);
+      setActiveRouteTitle(initialRoute.routeTitle);
+      setTrackingRoute(true);
+      setVisitedIds([]);
+    }
+  }, [initialRoute]);
 
   // Convert real coords → map % (bounding box around Липецкая область)
   const coordsToMapPct = useCallback((lat: number, lon: number): { x: number; y: number } => {
@@ -121,6 +139,8 @@ export default function MapPage() {
   const stopTracking = () => {
     setTrackingRoute(false);
     setVisitedIds([]);
+    setActiveRouteTitle("");
+    onRouteClear?.();
   };
 
   if (articleId !== null) {
@@ -196,9 +216,11 @@ export default function MapPage() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Icon name="Navigation" size={13} style={{ color: 'hsl(var(--gold))' }} />
-              <span className="text-xs font-ibm tracking-[0.12em] uppercase" style={{ color: 'hsl(var(--gold))' }}>
-                Прогресс маршрута
-              </span>
+              <div>
+                <span className="text-xs font-ibm tracking-[0.12em] uppercase" style={{ color: 'hsl(var(--gold))' }}>
+                  {activeRouteTitle || "Маршрут"}
+                </span>
+              </div>
             </div>
             <span className="font-cormorant text-lg" style={{ color: 'hsl(var(--ink))' }}>
               {visitedIds.length} / {activeRouteIds.length} точек
