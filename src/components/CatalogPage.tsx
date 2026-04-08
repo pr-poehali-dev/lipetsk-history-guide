@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
+import ArticlePage from "@/components/ArticlePage";
 
 interface Monument {
   id: number;
@@ -14,7 +15,7 @@ interface Monument {
 }
 
 const monuments: Monument[] = [
-  { id: 1, name: "Успенский собор", type: "Архитектура", period: "XII в.", century: "XII", status: "Федеральный", desc: "Белокаменный собор домонгольского периода, один из немногих сохранившихся памятников архитектуры XII века.", location: "Исторический центр", },
+  { id: 1, name: "Успенский собор", type: "Архитектура", period: "XII в.", century: "XII", status: "Федеральный", desc: "Белокаменный собор домонгольского периода, один из немногих сохранившихся памятников архитектуры XII века.", location: "Исторический центр" },
   { id: 2, name: "Городище Старое", type: "Археология", period: "VIII–X вв.", century: "VIII–X", status: "Федеральный", desc: "Остатки укреплённого раннесредневекового поселения. Оборонительные валы, следы деревянных строений.", location: "Северный район", discovered: "1953" },
   { id: 3, name: "Дворянская усадьба Орловых", type: "Архитектура", period: "XVIII в.", century: "XVIII", status: "Региональный", desc: "Усадебный комплекс эпохи классицизма. Главный дом с шестиколонным портиком, регулярный парк, флигели.", location: "Западный район" },
   { id: 4, name: "Курганный могильник «Лысая гора»", type: "Археология", period: "VI–VIII вв.", century: "VI–VIII", status: "Региональный", desc: "Группа из 14 курганов раннеславянского времени. Частично исследована экспедицией 1987 года.", location: "Восточный район", discovered: "1987" },
@@ -26,15 +27,18 @@ const monuments: Monument[] = [
   { id: 10, name: "Стоянка каменного века Медвежья пещера", type: "Археология", period: "XII тыс. до н.э.", century: "XII тыс.", status: "Федеральный", desc: "Стоянка палеолитического человека. Орудия труда, кости мамонта и пещерного медведя.", location: "Горный массив", discovered: "1934" },
   { id: 11, name: "Усадьба Голицыных", type: "Архитектура", period: "XVIII в.", century: "XVIII", status: "Региональный", desc: "Небольшой усадебный комплекс с сохранившимся деревянным главным домом и остатками регулярного парка.", location: "Пригород" },
   { id: 12, name: "Луговые степи Привольные", type: "Природа", period: "–", century: "–", status: "Региональный", desc: "Сохранившийся участок первозданной луговой степи. Уникальная флора: около 200 видов, 12 краснокнижных.", location: "Степной район" },
+  { id: 13, name: "Аргамач-Пальна", type: "Природа", period: "–", century: "–", status: "Региональный", desc: "Природно-исторический памятник на высоком берегу Быстрой Сосны. Городище скифского времени, меловые склоны с редкой флорой.", location: "Аргамач-Пальна" },
+  { id: 14, name: "Центр романовской игрушки", type: "Культура", period: "XIX в.", century: "XIX", status: "Региональный", desc: "Центр возрождения уникального народного промысла — романовской глиняной игрушки Липецкого края.", location: "Романово" },
 ];
 
-const types = ["Все", "Архитектура", "Археология", "Природа"];
+const types = ["Все", "Архитектура", "Археология", "Природа", "Культура"];
 const statuses = ["Все", "Федеральный", "Региональный", "Местный"];
 
 const statusColor: Record<string, string> = {
   "Федеральный": "hsl(35 60% 40%)",
   "Региональный": "hsl(200 50% 35%)",
   "Местный": "hsl(280 30% 40%)",
+  "Культура": "hsl(280 35% 40%)",
 };
 
 export default function CatalogPage() {
@@ -42,6 +46,11 @@ export default function CatalogPage() {
   const [filterStatus, setFilterStatus] = useState("Все");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Monument | null>(null);
+  const [articleId, setArticleId] = useState<number | null>(null);
+
+  if (articleId !== null) {
+    return <ArticlePage monumentId={articleId} onBack={() => setArticleId(null)} />;
+  }
 
   const filtered = monuments.filter((m) => {
     const matchType = filterType === "Все" || m.type === filterType;
@@ -55,103 +64,50 @@ export default function CatalogPage() {
     <div className="max-w-6xl mx-auto px-6 py-12">
       {/* Header */}
       <div className="mb-8">
-        <div
-          className="text-xs tracking-[0.2em] uppercase font-ibm mb-3 flex items-center gap-2"
-          style={{ color: 'hsl(var(--gold))' }}
-        >
+        <div className="text-xs tracking-[0.2em] uppercase font-ibm mb-3 flex items-center gap-2" style={{ color: 'hsl(var(--gold))' }}>
           <div style={{ width: 20, height: 1, background: 'hsl(var(--gold))' }} />
           Полный реестр
         </div>
         <div className="flex items-end justify-between">
-          <h1
-            className="font-cormorant text-5xl"
-            style={{ color: 'hsl(var(--ink))', fontWeight: 300 }}
-          >
+          <h1 className="font-cormorant text-5xl" style={{ color: 'hsl(var(--ink))', fontWeight: 300 }}>
             Каталог памятников
           </h1>
-          <span
-            className="font-ibm text-sm"
-            style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}
-          >
+          <span className="font-ibm text-sm" style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}>
             {filtered.length} из {monuments.length} объектов
           </span>
         </div>
       </div>
 
       {/* Search & Filters */}
-      <div
-        className="p-5 mb-6"
-        style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))' }}
-      >
-        {/* Search */}
+      <div className="p-5 mb-6" style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))' }}>
         <div className="relative mb-4">
-          <Icon
-            name="Search"
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2"
-            style={{ color: 'hsl(var(--ink-muted))' }}
-          />
+          <Icon name="Search" size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'hsl(var(--ink-muted))' }} />
           <input
             type="text"
             placeholder="Поиск по названию или описанию..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 font-ibm text-sm outline-none"
-            style={{
-              border: '1px solid hsl(var(--border))',
-              background: 'hsl(var(--parchment))',
-              color: 'hsl(var(--ink))',
-              fontWeight: 300,
-            }}
+            style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment))', color: 'hsl(var(--ink))', fontWeight: 300 }}
           />
         </div>
 
-        {/* Filter row */}
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-2">
-            <span
-              className="text-xs tracking-[0.1em] uppercase font-ibm"
-              style={{ color: 'hsl(var(--ink-muted))', fontSize: 10 }}
-            >
-              Тип:
-            </span>
+            <span className="text-xs tracking-[0.1em] uppercase font-ibm" style={{ color: 'hsl(var(--ink-muted))', fontSize: 10 }}>Тип:</span>
             {types.map((t) => (
-              <button
-                key={t}
-                onClick={() => setFilterType(t)}
-                className="filter-chip px-3 py-1.5"
-                style={{
-                  background: filterType === t ? 'hsl(var(--primary))' : 'transparent',
-                  color: filterType === t ? 'hsl(var(--primary-foreground))' : 'hsl(var(--ink-muted))',
-                }}
-              >
+              <button key={t} onClick={() => setFilterType(t)} className="filter-chip px-3 py-1.5"
+                style={{ background: filterType === t ? 'hsl(var(--primary))' : 'transparent', color: filterType === t ? 'hsl(var(--primary-foreground))' : 'hsl(var(--ink-muted))' }}>
                 {t}
               </button>
             ))}
           </div>
-
-          <div
-            className="w-px mx-1"
-            style={{ background: 'hsl(var(--border))' }}
-          />
-
+          <div className="w-px mx-1" style={{ background: 'hsl(var(--border))' }} />
           <div className="flex items-center gap-2">
-            <span
-              className="text-xs tracking-[0.1em] uppercase font-ibm"
-              style={{ color: 'hsl(var(--ink-muted))', fontSize: 10 }}
-            >
-              Охрана:
-            </span>
+            <span className="text-xs tracking-[0.1em] uppercase font-ibm" style={{ color: 'hsl(var(--ink-muted))', fontSize: 10 }}>Охрана:</span>
             {statuses.map((s) => (
-              <button
-                key={s}
-                onClick={() => setFilterStatus(s)}
-                className="filter-chip px-3 py-1.5"
-                style={{
-                  background: filterStatus === s ? 'hsl(var(--primary))' : 'transparent',
-                  color: filterStatus === s ? 'hsl(var(--primary-foreground))' : 'hsl(var(--ink-muted))',
-                }}
-              >
+              <button key={s} onClick={() => setFilterStatus(s)} className="filter-chip px-3 py-1.5"
+                style={{ background: filterStatus === s ? 'hsl(var(--primary))' : 'transparent', color: filterStatus === s ? 'hsl(var(--primary-foreground))' : 'hsl(var(--ink-muted))' }}>
                 {s}
               </button>
             ))}
@@ -162,54 +118,37 @@ export default function CatalogPage() {
       <div className="grid grid-cols-3 gap-4">
         {/* Monument grid */}
         <div className="col-span-2 grid grid-cols-2 gap-4 content-start">
-          {filtered.map((m, idx) => (
+          {filtered.map((m) => (
             <button
               key={m.id}
               onClick={() => setSelected(m)}
-              className={`monument-card text-left p-5 fade-in-up fade-in-up-delay-${(idx % 4) + 1}`}
+              className="monument-card text-left p-5"
               style={{
                 border: `1px solid ${selected?.id === m.id ? 'hsl(var(--gold))' : 'hsl(var(--border))'}`,
                 background: selected?.id === m.id ? 'hsl(var(--parchment-dark))' : 'transparent',
               }}
             >
-              {/* Type & Status */}
               <div className="flex items-center justify-between mb-3">
-                <span
-                  className="text-xs font-ibm tracking-[0.1em] uppercase"
-                  style={{ color: statusColor[m.status] || 'hsl(var(--ink-muted))', fontSize: 10 }}
-                >
+                <span className="text-xs font-ibm tracking-[0.1em] uppercase"
+                  style={{ color: statusColor[m.status] ?? 'hsl(var(--ink-muted))', fontSize: 10 }}>
                   {m.type}
                 </span>
-                <span
-                  className="text-xs font-ibm px-2 py-0.5"
-                  style={{
-                    border: '1px solid hsl(var(--border))',
-                    color: 'hsl(var(--ink-muted))',
-                    fontSize: 10,
-                  }}
-                >
+                <span className="text-xs font-ibm px-2 py-0.5"
+                  style={{ border: '1px solid hsl(var(--border))', color: 'hsl(var(--ink-muted))', fontSize: 10 }}>
                   {m.period}
                 </span>
               </div>
 
-              <h3
-                className="font-cormorant text-lg leading-snug mb-2"
-                style={{ color: 'hsl(var(--ink))', fontWeight: 400 }}
-              >
+              <h3 className="font-cormorant text-lg leading-snug mb-2" style={{ color: 'hsl(var(--ink))', fontWeight: 400 }}>
                 {m.name}
               </h3>
 
-              <p
-                className="font-ibm text-xs leading-relaxed line-clamp-2"
-                style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}
-              >
+              <p className="font-ibm text-xs leading-relaxed line-clamp-2" style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}>
                 {m.desc}
               </p>
 
-              <div
-                className="flex items-center gap-1 mt-3 pt-3 text-xs font-ibm"
-                style={{ borderTop: '1px solid hsl(var(--border))', color: 'hsl(var(--ink-muted))' }}
-              >
+              <div className="flex items-center gap-1 mt-3 pt-3 text-xs font-ibm"
+                style={{ borderTop: '1px solid hsl(var(--border))', color: 'hsl(var(--ink-muted))' }}>
                 <Icon name="MapPin" size={10} />
                 {m.location}
               </div>
@@ -219,53 +158,34 @@ export default function CatalogPage() {
           {filtered.length === 0 && (
             <div className="col-span-2 py-16 text-center">
               <Icon name="SearchX" size={32} style={{ color: 'hsl(var(--gold) / 0.3)', margin: '0 auto 12px' }} />
-              <p className="font-cormorant text-xl italic" style={{ color: 'hsl(var(--ink-muted))' }}>
-                Ничего не найдено
-              </p>
+              <p className="font-cormorant text-xl italic" style={{ color: 'hsl(var(--ink-muted))' }}>Ничего не найдено</p>
             </div>
           )}
         </div>
 
-        {/* Detail */}
+        {/* Detail panel */}
         <div style={{ position: 'sticky', top: 80, alignSelf: 'start' }}>
           {selected ? (
-            <div
-              className="p-6 fade-in-up"
-              style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))' }}
-            >
+            <div className="p-6 fade-in-up" style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))' }}>
               <div className="flex items-center justify-between mb-4">
-                <span
-                  className="text-xs tracking-[0.12em] uppercase font-ibm px-3 py-1"
-                  style={{ border: `1px solid ${statusColor[selected.status]}`, color: statusColor[selected.status] }}
-                >
+                <span className="text-xs tracking-[0.12em] uppercase font-ibm px-3 py-1"
+                  style={{ border: `1px solid ${statusColor[selected.status] ?? 'hsl(var(--border))'}`, color: statusColor[selected.status] ?? 'hsl(var(--ink-muted))' }}>
                   {selected.status}
                 </span>
-                <button
-                  onClick={() => setSelected(null)}
-                  style={{ color: 'hsl(var(--ink-muted))' }}
-                >
+                <button onClick={() => setSelected(null)} style={{ color: 'hsl(var(--ink-muted))' }}>
                   <Icon name="X" size={14} />
                 </button>
               </div>
 
-              <div
-                className="text-xs font-ibm tracking-[0.12em] uppercase mb-2"
-                style={{ color: 'hsl(var(--gold))' }}
-              >
+              <div className="text-xs font-ibm tracking-[0.12em] uppercase mb-2" style={{ color: 'hsl(var(--gold))' }}>
                 {selected.type}
               </div>
 
-              <h2
-                className="font-cormorant text-2xl leading-tight mb-4"
-                style={{ color: 'hsl(var(--ink))', fontWeight: 400 }}
-              >
+              <h2 className="font-cormorant text-2xl leading-tight mb-4" style={{ color: 'hsl(var(--ink))', fontWeight: 400 }}>
                 {selected.name}
               </h2>
 
-              <div
-                className="grid grid-cols-2 gap-3 pb-4 mb-4"
-                style={{ borderBottom: '1px solid hsl(var(--border))' }}
-              >
+              <div className="grid grid-cols-2 gap-3 pb-4 mb-4" style={{ borderBottom: '1px solid hsl(var(--border))' }}>
                 <div>
                   <div className="text-xs font-ibm" style={{ color: 'hsl(var(--ink-muted) / 0.7)', fontWeight: 300, marginBottom: 2 }}>Период</div>
                   <div className="font-cormorant text-base" style={{ color: 'hsl(var(--ink))' }}>{selected.period}</div>
@@ -282,30 +202,31 @@ export default function CatalogPage() {
                 </div>
               </div>
 
-              <p
-                className="font-ibm text-sm leading-relaxed mb-5"
-                style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}
-              >
+              <p className="font-ibm text-sm leading-relaxed mb-5" style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}>
                 {selected.desc}
               </p>
 
-              <button
-                className="w-full py-3 text-xs tracking-[0.15em] uppercase font-ibm transition-all hover:opacity-80 flex items-center justify-center gap-2"
-                style={{ background: 'hsl(var(--gold))', color: 'hsl(var(--ink))' }}
-              >
-                <Icon name="Map" size={12} />
-                Показать на карте
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setArticleId(selected.id)}
+                  className="w-full py-3 text-xs tracking-[0.15em] uppercase font-ibm transition-all hover:opacity-80 flex items-center justify-center gap-2"
+                  style={{ background: 'hsl(var(--gold))', color: 'hsl(var(--ink))' }}
+                >
+                  <Icon name="FileText" size={12} />
+                  Читать статью
+                </button>
+                <button
+                  className="w-full py-2.5 text-xs tracking-[0.12em] uppercase font-ibm flex items-center justify-center gap-2"
+                  style={{ border: '1px solid hsl(var(--border))', color: 'hsl(var(--ink-muted))' }}
+                >
+                  <Icon name="Map" size={12} />
+                  Показать на карте
+                </button>
+              </div>
             </div>
           ) : (
-            <div
-              className="p-6 flex flex-col items-center justify-center text-center"
-              style={{
-                border: '1px solid hsl(var(--border))',
-                background: 'hsl(var(--parchment-dark))',
-                minHeight: 280,
-              }}
-            >
+            <div className="p-6 flex flex-col items-center justify-center text-center"
+              style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))', minHeight: 280 }}>
               <Icon name="BookOpen" size={28} style={{ color: 'hsl(var(--gold) / 0.3)', marginBottom: 12 }} />
               <p className="font-cormorant text-lg italic" style={{ color: 'hsl(var(--ink-muted))' }}>
                 Выберите памятник<br />из каталога

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
+import ArticlePage from "@/components/ArticlePage";
 
 interface Monument {
   id: number;
@@ -20,36 +21,38 @@ const monuments: Monument[] = [
   { id: 6, name: "Монастырь Троицкий", type: "Архитектура", period: "XVI в.", x: 18, y: 42, desc: "Монастырский ансамбль с сохранившимися трапезной, звонницей и кельями." },
   { id: 7, name: "Наскальные петроглифы", type: "Археология", period: "III тыс. до н.э.", x: 80, y: 55, desc: "Наскальные изображения эпохи бронзы, открытые в 1962 году." },
   { id: 8, name: "Парк культуры", type: "Природа", period: "XIX в.", x: 52, y: 38, desc: "Исторический пейзажный парк с редкими породами деревьев и беседками." },
+  { id: 13, name: "Аргамач-Пальна", type: "Природа", period: "–", x: 35, y: 72, desc: "Природно-исторический памятник на высоком берегу Быстрой Сосны с городищем скифского времени." },
+  { id: 14, name: "Центр романовской игрушки", type: "Культура", period: "XIX в.", x: 58, y: 20, desc: "Центр возрождения уникального народного промысла — романовской глиняной игрушки Липецкого края." },
 ];
 
 const typeColors: Record<string, string> = {
   "Архитектура": "hsl(35 60% 40%)",
   "Археология": "hsl(200 50% 35%)",
   "Природа": "hsl(140 40% 32%)",
+  "Культура": "hsl(280 35% 40%)",
 };
 
 export default function MapPage() {
   const [selected, setSelected] = useState<Monument | null>(null);
   const [filterType, setFilterType] = useState<string>("Все");
+  const [articleId, setArticleId] = useState<number | null>(null);
 
-  const types = ["Все", "Архитектура", "Археология", "Природа"];
+  if (articleId !== null) {
+    return <ArticlePage monumentId={articleId} onBack={() => setArticleId(null)} />;
+  }
+
+  const types = ["Все", "Архитектура", "Археология", "Природа", "Культура"];
   const filtered = filterType === "Все" ? monuments : monuments.filter((m) => m.type === filterType);
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       {/* Header */}
       <div className="mb-8">
-        <div
-          className="text-xs tracking-[0.2em] uppercase font-ibm mb-3 flex items-center gap-2"
-          style={{ color: 'hsl(var(--gold))' }}
-        >
+        <div className="text-xs tracking-[0.2em] uppercase font-ibm mb-3 flex items-center gap-2" style={{ color: 'hsl(var(--gold))' }}>
           <div style={{ width: 20, height: 1, background: 'hsl(var(--gold))' }} />
           Интерактивная карта
         </div>
-        <h1
-          className="font-cormorant text-5xl"
-          style={{ color: 'hsl(var(--ink))', fontWeight: 300 }}
-        >
+        <h1 className="font-cormorant text-5xl" style={{ color: 'hsl(var(--ink))', fontWeight: 300 }}>
           Памятники на карте
         </h1>
       </div>
@@ -75,13 +78,8 @@ export default function MapPage() {
         {/* Map */}
         <div
           className="col-span-2 relative overflow-hidden"
-          style={{
-            height: 520,
-            border: '1px solid hsl(var(--border))',
-            background: 'hsl(var(--parchment-dark))',
-          }}
+          style={{ height: 520, border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))' }}
         >
-          {/* Map background */}
           <img
             src="https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/b49a6cc5-42fe-4cfb-a828-5f884d37fda9.jpg"
             alt="Карта"
@@ -90,18 +88,13 @@ export default function MapPage() {
 
           {/* Grid lines */}
           <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(hsl(var(--gold) / 0.08) 1px, transparent 1px),
-              linear-gradient(90deg, hsl(var(--gold) / 0.08) 1px, transparent 1px)
-            `,
+            backgroundImage: `linear-gradient(hsl(var(--gold) / 0.08) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.08) 1px, transparent 1px)`,
             backgroundSize: '60px 60px',
           }} />
 
           {/* Compass */}
-          <div
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center font-cormorant text-sm font-bold"
-            style={{ border: '1px solid hsl(var(--gold) / 0.4)', color: 'hsl(var(--gold))' }}
-          >
+          <div className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center font-cormorant text-sm font-bold"
+            style={{ border: '1px solid hsl(var(--gold) / 0.4)', color: 'hsl(var(--gold))' }}>
             С
           </div>
 
@@ -116,21 +109,14 @@ export default function MapPage() {
               <div
                 className="map-marker relative"
                 style={{
-                  background: selected?.id === monument.id
-                    ? 'hsl(var(--gold))'
-                    : typeColors[monument.type],
+                  background: selected?.id === monument.id ? 'hsl(var(--gold))' : typeColors[monument.type],
                   width: selected?.id === monument.id ? 16 : 12,
                   height: selected?.id === monument.id ? 16 : 12,
                 }}
               />
-              {/* Tooltip */}
               <div
                 className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 whitespace-nowrap text-xs font-ibm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                style={{
-                  background: 'hsl(var(--ink))',
-                  color: 'hsl(var(--gold))',
-                  border: '1px solid hsl(var(--gold) / 0.3)',
-                }}
+                style={{ background: 'hsl(var(--ink))', color: 'hsl(var(--gold))', border: '1px solid hsl(var(--gold) / 0.3)' }}
               >
                 {monument.name}
               </div>
@@ -138,13 +124,8 @@ export default function MapPage() {
           ))}
 
           {/* Legend */}
-          <div
-            className="absolute bottom-4 left-4 p-3"
-            style={{
-              background: 'hsl(var(--parchment) / 0.9)',
-              border: '1px solid hsl(var(--border))',
-            }}
-          >
+          <div className="absolute bottom-4 left-4 p-3"
+            style={{ background: 'hsl(var(--parchment) / 0.9)', border: '1px solid hsl(var(--border))' }}>
             {Object.entries(typeColors).map(([type, color]) => (
               <div key={type} className="flex items-center gap-2 mb-1 last:mb-0">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
@@ -155,67 +136,47 @@ export default function MapPage() {
         </div>
 
         {/* Info panel */}
-        <div
-          className="p-6"
-          style={{
-            border: '1px solid hsl(var(--border))',
-            background: 'hsl(var(--parchment-dark))',
-          }}
-        >
+        <div className="p-6" style={{ border: '1px solid hsl(var(--border))', background: 'hsl(var(--parchment-dark))' }}>
           {selected ? (
             <div className="fade-in-up">
-              <div
-                className="text-xs tracking-[0.15em] uppercase font-ibm mb-4 flex items-center gap-2"
-                style={{ color: typeColors[selected.type] }}
-              >
+              <div className="text-xs tracking-[0.15em] uppercase font-ibm mb-4 flex items-center gap-2"
+                style={{ color: typeColors[selected.type] }}>
                 <div className="w-2 h-2 rounded-full" style={{ background: typeColors[selected.type] }} />
                 {selected.type}
               </div>
 
-              <h3
-                className="font-cormorant text-2xl mb-2 leading-tight"
-                style={{ color: 'hsl(var(--ink))', fontWeight: 400 }}
-              >
+              <h3 className="font-cormorant text-2xl mb-2 leading-tight" style={{ color: 'hsl(var(--ink))', fontWeight: 400 }}>
                 {selected.name}
               </h3>
 
-              <div
-                className="text-xs font-ibm mb-5 px-3 py-1 inline-block"
-                style={{
-                  border: '1px solid hsl(var(--gold) / 0.3)',
-                  color: 'hsl(var(--gold))',
-                }}
-              >
+              <div className="text-xs font-ibm mb-5 px-3 py-1 inline-block"
+                style={{ border: '1px solid hsl(var(--gold) / 0.3)', color: 'hsl(var(--gold))' }}>
                 {selected.period}
               </div>
 
-              <p
-                className="font-ibm text-sm leading-relaxed mb-6"
-                style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300, borderTop: '1px solid hsl(var(--border))', paddingTop: 16 }}
-              >
+              <p className="font-ibm text-sm leading-relaxed mb-6"
+                style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300, borderTop: '1px solid hsl(var(--border))', paddingTop: 16 }}>
                 {selected.desc}
               </p>
 
-              <button
-                className="w-full py-3 text-xs tracking-[0.15em] uppercase font-ibm transition-all hover:opacity-80"
-                style={{ background: 'hsl(var(--gold))', color: 'hsl(var(--ink))' }}
-              >
-                Подробнее →
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setArticleId(selected.id)}
+                  className="w-full py-3 text-xs tracking-[0.15em] uppercase font-ibm transition-all hover:opacity-80 flex items-center justify-center gap-2"
+                  style={{ background: 'hsl(var(--gold))', color: 'hsl(var(--ink))' }}
+                >
+                  <Icon name="FileText" size={12} />
+                  Читать статью
+                </button>
+              </div>
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center" style={{ minHeight: 300 }}>
               <Icon name="MapPin" size={32} style={{ color: 'hsl(var(--gold) / 0.3)', marginBottom: 12 }} />
-              <p
-                className="font-cormorant text-xl italic"
-                style={{ color: 'hsl(var(--ink-muted))' }}
-              >
+              <p className="font-cormorant text-xl italic" style={{ color: 'hsl(var(--ink-muted))' }}>
                 Выберите памятник<br />на карте
               </p>
-              <p
-                className="font-ibm text-xs mt-2"
-                style={{ color: 'hsl(var(--ink-muted) / 0.6)', fontWeight: 300 }}
-              >
+              <p className="font-ibm text-xs mt-2" style={{ color: 'hsl(var(--ink-muted) / 0.6)', fontWeight: 300 }}>
                 {filtered.length} объектов отображено
               </p>
             </div>
