@@ -183,7 +183,7 @@ export default function RoutesPage() {
                 { icon: "Flag", label: "Остановок", val: `${selected.stops} точек` },
               ].map((item) => (
                 <div key={item.label} className="text-center">
-                  <Icon name={item.icon} size={16} style={{ color: 'hsl(var(--gold))', margin: '0 auto 4px' }} />
+                  <Icon name={item.icon} size={16} style={{ color: 'hsl(var(--gold))', marginBottom: 4, display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
                   <div className="font-cormorant text-xl" style={{ color: 'hsl(var(--ink))' }}>{item.val}</div>
                   <div className="text-xs font-ibm" style={{ color: 'hsl(var(--ink-muted))', fontWeight: 300 }}>{item.label}</div>
                 </div>

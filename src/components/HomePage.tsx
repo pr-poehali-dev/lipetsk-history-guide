@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Icon from "@/components/ui/icon";
 
 type Page = "home" | "map" | "routes" | "catalog";
@@ -118,7 +119,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           className="absolute bottom-8 right-8 flex flex-col items-center gap-2"
           style={{ color: 'hsl(var(--gold) / 0.5)' }}
         >
-          <span className="text-xs tracking-[0.2em] uppercase font-ibm" style={{ writingMode: 'vertical-rl' }}>
+          <span className="text-xs tracking-[0.2em] uppercase font-ibm" style={{ writingMode: 'vertical-rl' as CSSProperties['writingMode'] }}>
             Листать
           </span>
           <Icon name="ChevronDown" size={14} />
