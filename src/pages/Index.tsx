@@ -1,14 +1,24 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import HomePage from "@/components/HomePage";
+import MapPage from "@/components/MapPage";
+import RoutesPage from "@/components/RoutesPage";
+import CatalogPage from "@/components/CatalogPage";
+import Navigation from "@/components/Navigation";
 
-const Index = () => {
+type Page = "home" | "map" | "routes" | "catalog";
+
+export default function Index() {
+  const [activePage, setActivePage] = useState<Page>("home");
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
+    <div className="min-h-screen" style={{ background: 'hsl(var(--parchment))' }}>
+      <Navigation activePage={activePage} onNavigate={setActivePage} />
+      <main>
+        {activePage === "home" && <HomePage onNavigate={setActivePage} />}
+        {activePage === "map" && <MapPage />}
+        {activePage === "routes" && <RoutesPage />}
+        {activePage === "catalog" && <CatalogPage />}
+      </main>
     </div>
   );
-};
-
-export default Index;
+}

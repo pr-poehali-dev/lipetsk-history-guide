@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1775669897209565036.html"
 	],
 	prefix: "",
 	theme: {
@@ -88,7 +89,21 @@ export default {
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fadeInUp 0.6s ease forwards',
+			},
+			fontFamily: {
+				'cormorant': ['Cormorant Garamond', 'serif'],
+				'ibm': ['IBM Plex Sans', 'sans-serif'],
+			},
+			colors: {
+				gold: 'hsl(var(--gold))',
+				'gold-light': 'hsl(var(--gold-light))',
+				parchment: 'hsl(var(--parchment))',
+				'parchment-dark': 'hsl(var(--parchment-dark))',
+				ink: 'hsl(var(--ink))',
+				'ink-muted': 'hsl(var(--ink-muted))',
+				sepia: 'hsl(var(--sepia))',
 			}
 		}
 	},
