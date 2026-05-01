@@ -18,6 +18,7 @@ export interface ArticleData {
   location: string;
   discovered?: string;
   fullDesc: string;
+  image?: string;
   facts: { label: string; value: string }[];
   sections: { title: string; text: string }[];
   tours?: Tour[];
@@ -25,7 +26,7 @@ export interface ArticleData {
 
 const articles: Record<number, ArticleData> = {
   1: {
-    id: 1, name: "Древне-Успенская церковь", type: "Архитектура", period: "XVII в.", status: "Федеральный", location: "ул. Ленина, 31, Липецк",
+    id: 1, name: "Древне-Успенская церковь", type: "Архитектура", period: "XVII в.", status: "Федеральный", location: "ул. Ленина, 31, Липецк", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/86e4e5f7-3587-458b-b3a2-4c94514f9442.jpg",
     fullDesc: "Один из старейших храмов Липецка в стиле русского барокко, памятник федерального значения. Основан в XVII веке как Паройская пустынь — место, которое посещал Пётр I во время инспекций липецких железоделательных заводов.",
     facts: [
       { label: "Основана", value: "XVII в." },
@@ -58,7 +59,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   2: {
-    id: 2, name: "Собор Рождества Христова", type: "Архитектура", period: "1842 г.", status: "Федеральный", location: "Соборная площадь, Липецк",
+    id: 2, name: "Собор Рождества Христова", type: "Архитектура", period: "1842 г.", status: "Федеральный", location: "Соборная площадь, Липецк", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/a0f1b238-8a84-4f1c-b357-ecdd584d0cbf.jpg",
     fullDesc: "Кафедральный собор Липецкой епархии на Соборной площади. Построен в 1791–1842 годах по указу Екатерины II. Архитектор — Томмазо Адолини. Пятиглавый храм в стиле классицизма является главной архитектурной доминантой центра Липецка.",
     facts: [
       { label: "Строительство", value: "1791–1842 гг." },
@@ -91,7 +92,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   3: {
-    id: 3, name: "Нижний парк", type: "Природа", period: "XVIII в.", status: "Региональный", location: "ул. Ленина, Липецк",
+    id: 3, name: "Нижний парк", type: "Природа", period: "XVIII в.", status: "Региональный", location: "ул. Ленина, Липецк", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/5de7ff50-b962-4a2f-b99b-808cd5bddf90.jpg",
     fullDesc: "Исторический парк у минеральных источников, основанный при Петре I. Здесь расположены бювет минеральных вод, фонтан «Липа», Комсомольский пруд и летний театр. Один из старейших городских парков России.",
     facts: [
       { label: "Основан", value: "Нач. XVIII в." },
@@ -116,7 +117,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   4: {
-    id: 4, name: "Верхний парк", type: "Природа", period: "XIX в.", status: "Региональный", location: "пл. Плеханова, Липецк",
+    id: 4, name: "Верхний парк", type: "Природа", period: "XIX в.", status: "Региональный", location: "пл. Плеханова, Липецк", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/f5ac5f9b-dc0b-45d5-93ad-852f01b94465.jpg",
     fullDesc: "Исторический пейзажный парк в центре Липецка с фонтанами, вековыми деревьями и видовыми площадками. Разбит в XIX веке. Рядом — Древне-Успенская церковь и памятник Петру I.",
     facts: [
       { label: "Разбит", value: "XIX в." },
@@ -140,7 +141,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   5: {
-    id: 5, name: "Заповедник «Галичья гора»", type: "Природа", period: "1925 г.", status: "Федеральный", location: "Данковский р-н, 45 км от Липецка",
+    id: 5, name: "Заповедник «Галичья гора»", type: "Природа", period: "1925 г.", status: "Федеральный", location: "Данковский р-н, 45 км от Липецка", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/1040ae3c-68c7-4cd3-a778-07fb60b7e1d3.jpg",
     fullDesc: "Один из самых маленьких государственных заповедников мира (площадь 230 га). Уникальные скалы девонского известняка на берегу реки Дон с реликтовой флорой ледникового периода. Основан в 1925 году.",
     facts: [
       { label: "Основан", value: "1925 г." },
@@ -173,7 +174,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   6: {
-    id: 6, name: "Задонский монастырь", type: "Архитектура", period: "XVI в.", status: "Федеральный", location: "г. Задонск, 85 км от Липецка",
+    id: 6, name: "Задонский монастырь", type: "Архитектура", period: "XVI в.", status: "Федеральный", location: "г. Задонск, 85 км от Липецка", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/a8ee4ee4-c988-441e-aa8a-a0b1c6616585.jpg",
     fullDesc: "Задонский Рождество-Богородицкий мужской монастырь — один из главных духовных центров Липецкого края. Основан в начале XVII века. Место паломничества: здесь покоятся мощи святителя Тихона Задонского (1724–1783).",
     facts: [
       { label: "Основан", value: "Нач. XVII в." },
@@ -206,7 +207,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   7: {
-    id: 7, name: "Археопарк «Аргамач»", type: "Археология", period: "XIV–XV вв.", status: "Региональный", location: "близ г. Елец, 78 км от Липецка",
+    id: 7, name: "Археопарк «Аргамач»", type: "Археология", period: "XIV–XV вв.", status: "Региональный", location: "близ г. Елец, 78 км от Липецка", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/b032b015-fa8d-47dc-a5cb-955a26427021.jpg",
     fullDesc: "Природно-археологический парк у горы Аргамач близ Ельца на берегу реки Пальны. Средневековое городище эпохи Елецкого княжества XIV–XV вв. Живописные меловые обрывы, панорама долины Быстрой Сосны.",
     facts: [
       { label: "Эпоха", value: "XIV–XV вв." },
@@ -238,7 +239,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   8: {
-    id: 8, name: "Липецкий краеведческий музей", type: "Культура", period: "1909 г.", status: "Региональный", location: "ул. Ленина, 25, Липецк",
+    id: 8, name: "Липецкий краеведческий музей", type: "Культура", period: "1909 г.", status: "Региональный", location: "ул. Ленина, 25, Липецк", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/95692712-a384-435f-bf9f-ed18bbe5a7c9.jpg",
     fullDesc: "Один из старейших музеев Липецкой области, основанный в 1909 году. Богатые коллекции по истории края от древнейших времён до XX века, природе региона, быту и культуре липецкого дворянства.",
     facts: [
       { label: "Основан", value: "1909 г." },
@@ -278,7 +279,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   9: {
-    id: 9, name: "Путевой дворец Петра I", type: "Архитектура", period: "XVIII в.", status: "Федеральный", location: "ул. Петровская, 1, Липецк",
+    id: 9, name: "Путевой дворец Петра I", type: "Архитектура", period: "XVIII в.", status: "Федеральный", location: "ул. Петровская, 1, Липецк", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/34269250-6116-4c32-ba14-16f9f2ec9fd3.jpg",
     fullDesc: "Памятник истории, связанный с посещением Петром I Липецких железоделательных заводов в 1700-х годах. Пётр неоднократно останавливался в Липецке, лично проверяя производство якорей, пушек и ядер для Азовского флота.",
     facts: [
       { label: "Эпоха", value: "Нач. XVIII в." },
@@ -355,7 +356,7 @@ const articles: Record<number, ArticleData> = {
     ],
   },
   14: {
-    id: 14, name: "Центр романовской игрушки", type: "Культура", period: "XIX в.", status: "Региональный", location: "Романово",
+    id: 14, name: "Центр романовской игрушки", type: "Культура", period: "XIX в.", status: "Региональный", location: "Романово", image: "https://cdn.poehali.dev/projects/35e99b30-aa66-45af-aba6-b153e8cdeca7/files/854a91bb-49c2-4cbf-a287-a73f6b6c51ef.jpg",
     fullDesc: "Центр народного промысла, посвящённый возрождению традиционной романовской глиняной игрушки — самобытного вида народного искусства Липецкого края. Промысел возник в XVIII–XIX веках в сёлах по берегам реки Воронеж.",
     facts: [
       { label: "Промысел", value: "XVIII–XIX вв." },
@@ -439,6 +440,18 @@ export default function ArticlePage({ monumentId, onBack }: ArticlePageProps) {
           {article.fullDesc}
         </p>
       </div>
+
+      {/* Hero image */}
+      {article.image && (
+        <div className="mb-12 overflow-hidden" style={{ height: 420, border: '1px solid hsl(var(--border))' }}>
+          <img
+            src={article.image}
+            alt={article.name}
+            className="w-full h-full object-cover"
+            style={{ filter: 'sepia(15%) contrast(1.05)' }}
+          />
+        </div>
+      )}
 
       {/* Facts grid */}
       <div
